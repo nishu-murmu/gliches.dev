@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/(images|fonts)/(.+)",
+      "destination": "/$1/$2"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

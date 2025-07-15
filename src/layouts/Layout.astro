@@ -3,6 +3,7 @@ import "../styles/global.css";
 import Header from "./MainLayout/Header";
 import Footer from "./MainLayout/Footer";
 import RootLayout from "./MainLayout/RootLayout";
+import Analytics from "@vercel/analytics/astro";
 ---
 
 <!doctype html>
@@ -13,6 +14,7 @@ import RootLayout from "./MainLayout/RootLayout";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>Nishu Murmu | _Gliches_</title>
+    <Analytics />
   </head>
   <RootLayout client:load>
     <div id="container" class="min-h-screen flex flex-col">
