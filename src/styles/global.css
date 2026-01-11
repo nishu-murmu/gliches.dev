@@ -9,13 +9,6 @@
   font-style: normal;
   font-display: swap;
 }
-@font-face {
-  font-family: "HackNerdFont";
-  src: url("/fonts/HackNerdFont-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
 
 @theme {
   --font-hack: "HackNerdFont", "sans-serif";
@@ -72,7 +65,7 @@
     transform: translate(-2px, 2px);
   }
   80% {
-    clip-path: inset(90% 0 10% 0);
+    clip-path: inset(90% 0 20% 0);
     transform: translate(2px, -2px);
   }
   100% {

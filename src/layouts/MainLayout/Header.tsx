@@ -109,26 +109,10 @@ const Header = () => {
           <ul className="hidden md:flex list-none gap-8 items-center">
             <li>
               <a
-                href="/projects"
-                className="text-gray-700 dark:text-gray-300 font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300"
-              >
-                Projects
-              </a>
-            </li>
-            <li>
-              <a
                 href="/blogs"
                 className="text-gray-700 dark:text-gray-300 font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300"
               >
                 Blogs
-              </a>
-            </li>
-            <li>
-              <a
-                href="/interests"
-                className="text-gray-700 dark:text-gray-300 font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300"
-              >
-                Interests
               </a>
             </li>
           </ul>
