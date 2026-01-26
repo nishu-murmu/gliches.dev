@@ -1,6 +1,49 @@
 ---
 import { Github, Instagram, Linkedin, ExternalLink, Star, GitFork } from "lucide-react";
+
+async function fetchRepoData(repoName) {
+  const response = await fetch(
+    `https://api.github.com/repos/nishu-murmu/${repoName}`
+  );
+  const data = await response.json();
+  return {
+    stargazers: data.stargazers_count ?? 0,
+    forks: data.forks_count ?? 0
+  };
+}
+
+function getMyAge() {
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth();
+  const currentDate = now.getDate();
+
+if (currentMonth < 9) {
+  return String(currentYear - 2).slice(2);
+}
+
+if (currentMonth === 9 && currentDate < 11) {
+  return String(currentYear - 2).slice(2);
+}
+
+return String(currentYear - 1).slice(2);
+
+}
+
+// fetch at build time
+const cursorInlineData = await fetchRepoData("cursor-inline");
+const cursorInlineStars = cursorInlineData.stargazers;
+const cursorInlineForks = cursorInlineData.forks;
+
+const themeSwitchData = await fetchRepoData("ThemeSwitch.nvim");
+const themeSwitchStars = themeSwitchData.stargazers;
+
+const ytSchedulerData = await fetchRepoData("Youtube-Video-Scheduler");
+const ytSchedulerStars = ytSchedulerData.stargazers;
+const myAge = getMyAge()
+
 ---
+
 
 <section id="hero" class="py-16 text-center">
   <div class="hero-content max-w-3xl mx-auto">
@@ -27,7 +70,7 @@ import { Github, Instagram, Linkedin, ExternalLink, Star, GitFork } from "lucide
       Software Developer | Calisthenics Enthusiast | Cinephile
     </h4>
     <p class="text-md md:text-md mb-8 text-gray-600 dark:text-gray-300">
-      23yr old guy, software developer specializing in browser extensions. Very
+    {myAge}yr old guy, software developer specializing in browser extensions. Very
       passionate about linux, neovim, Calisthenics, chess, movies, shows, pop
       culture, philosophy, etc.
     </p>
@@ -103,7 +146,7 @@ import { Github, Instagram, Linkedin, ExternalLink, Star, GitFork } from "lucide
         <span class="inline-block my-1 px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs align-middle">Lua</span>
         <span class="inline-flex items-center gap-1 text-gray-500 dark:text-gray-400 text-sm align-middle ml-2">
           <Star className="h-4 w-4" />
-          <span>4</span>
+          <span>{themeSwitchStars}</span>
         </span>
       </li>
       <li>
@@ -121,11 +164,7 @@ import { Github, Instagram, Linkedin, ExternalLink, Star, GitFork } from "lucide
         <span class="inline-block my-1 px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs align-middle">Lua</span>
         <span class="inline-flex items-center gap-1 text-gray-500 dark:text-gray-400 text-sm align-middle ml-2">
           <Star className="h-4 w-4" />
-          <span>5</span>
-        </span>
-        <span class="inline-flex items-center gap-1 text-gray-500 dark:text-gray-400 text-sm align-middle ml-2">
-          <GitFork className="h-4 w-4" />
-          <span>1</span>
+          <span>{cursorInlineStars}</span>
         </span>
       </li>
       <li>
@@ -143,7 +182,7 @@ import { Github, Instagram, Linkedin, ExternalLink, Star, GitFork } from "lucide
         <span class="inline-block my-1 px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs align-middle">TypeScript</span>
         <span class="inline-flex items-center gap-1 text-gray-500 dark:text-gray-400 text-sm align-middle ml-2">
           <Star className="h-4 w-4" />
-          <span>2</span>
+          <span>{ytSchedulerStars}</span>
         </span>
       </li>
       <li>
