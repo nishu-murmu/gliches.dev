@@ -9,10 +9,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   integrations: [
     react(),
-    mdx({
-      syntaxHighlight: false,
-      rehypePlugins: [],
-    }),
+    mdx(),
   ],
   adapter: vercel({
     webAnalytics: {

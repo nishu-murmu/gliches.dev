@@ -1,0 +1,95 @@
+---
+title: "Understanding the Chrome Extension Manifest V3"
+description: "A deep dive into Chrome Extension Manifest V3 and how to migrate from V2."
+pubDate: 2026-01-10
+tags: ["javascript", "browser-extension", "chrome"]
+---
+
+## What Changed in Manifest V3?
+
+Manifest V3 is the latest version of the Chrome Extensions platform. It introduces significant changes focused on security, privacy, and performance.
+
+## Key Differences
+
+### Background Scripts → Service Workers
+
+The biggest change: persistent background pages are gone. They're replaced by **service workers** which are event-driven and terminate when idle.
+
+```json
+// manifest.json (V3)
+{
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  }
+}
+```
+
+### Content Security Policy
+
+Inline scripts are no longer allowed. You must use external script files:
+
+```json
+{
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}
+```
+
+### declarativeNetRequest
+
+The `webRequest` API is replaced by `declarativeNetRequest` for most use cases:
+
+```javascript
+// Block ads declaratively
+chrome.declarativeNetRequest.updateDynamicRules({
+  removeRuleIds: [1],
+  addRules: [{
+    id: 1,
+    priority: 1,
+    action: { type: "block" },
+    condition: {
+      urlFilter: "||ads.example.com",
+      resourceTypes: ["script", "image"]
+    }
+  }]
+});
+```
+
+## Migrating Your Extension
+
+1. Update `manifest_version` to 3
+2. Convert background scripts to service workers
+3. Replace `webRequest` with `declarativeNetRequest`
+4. Move inline scripts to external files
+5. Update permission declarations
+
+## My Experience Migrating WhatsApp-Toggle
+
+When I migrated my [WhatsApp-Toggle](https://github.com/nishu-murmu/WhatsApp-Toggle) extension, the main challenge was handling state in the service worker since it can terminate at any time.
+
+```javascript
+// Use chrome.storage for persistent state
+chrome.storage.local.get(["enabled"], (result) => {
+  if (result.enabled) {
+    activateToggle();
+  }
+});
+```
+
+## Tips
+
+- Use `chrome.storage` for anything that needs to persist
+- Keep your service worker lean — it should wake up, do work, and sleep
+- Test with DevTools > Application > Service Workers
+- Use `chrome.runtime.sendMessage` for component communication
+
+## Resources
+
+- [Chrome Extension Docs](https://developer.chrome.com/docs/extensions/)
+- [Migration Guide](https://developer.chrome.com/docs/extensions/develop/migrate)
+- [MV3 Samples](https://github.com/GoogleChrome/chrome-extensions-samples)
+
+The transition to MV3 is mandatory now. Start migrating early to avoid last-minute issues.

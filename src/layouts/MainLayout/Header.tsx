@@ -4,7 +4,12 @@ import { toggleDarkMode } from "../../atoms";
 import { useStore } from "@nanostores/react";
 
 const Header = () => {
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("toggleDarkMode") === "dark";
+    }
+    return true;
+  });
   const [displayText, setDisplayText] = useState("Nishu Murmu");
   const [textColor, setTextColor] = useState<string>("");
   const [isHovered, setIsHovered] = useState(false);
@@ -51,23 +56,21 @@ const Header = () => {
         clearInterval(intervalRef.current!);
         intervalRef.current = null;
         setDisplayText(input2);
-        setTextColor("#48e2d5"); // Reset color
+        setTextColor("#48e2d5");
         return;
       }
 
-      // Set random psychedelic color
       const randomColor =
         psychedelicColors[Math.floor(Math.random() * psychedelicColors.length)];
       setTextColor(randomColor);
       setDisplayText(getRandomText(maxLength));
-    }, 50); // Adjust speed here
+    }, 50);
   };
 
   const toggleDarkModeHandler = () => {
-    setToggle((prev) => !prev);
-    const currentMode = $toggleDarkMode == "dark" ? "light" : "dark";
+    const currentMode = $toggleDarkMode === "dark" ? "light" : "dark";
     toggleDarkMode.set(currentMode);
-    localStorage.setItem("toggleDarkMode", currentMode);
+    setToggle(currentMode === "dark");
   };
 
   useEffect(() => {
@@ -99,7 +102,7 @@ const Header = () => {
             <a
               href="/"
               className="transition-all duration-300 dark:text-[#FFFDF6] text-[#1d1e20]"
-              style={{ color: textColor || "" }} // Apply dynamic color
+              style={{ color: textColor || "" }}
             >
               {displayText}
             </a>

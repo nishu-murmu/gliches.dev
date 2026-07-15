@@ -1,0 +1,74 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Layout>
+  <article class="py-12 max-w-3xl mx-auto">
+    <header class="mb-10">
+      <a
+        href="/blogs"
+        class="text-sm text-[#48e2d5] hover:underline mb-4 inline-block"
+      >
+        &larr; Back to blogs
+      </a>
+      <h1 class="text-3xl md:text-4xl font-bold text-[#1d1e20] dark:text-[#FFFDF6] mb-3">
+        {post.data.title}
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400 mb-4">
+        {post.data.description}
+      </p>
+      <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+        <time datetime={post.data.pubDate.toISOString()}>
+          {post.data.pubDate.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </time>
+      </div>
+      <div class="flex flex-wrap gap-2 mt-4">
+        {post.data.tags.map((tag: string) => (
+          <span class="px-3 py-1 text-xs rounded-full bg-[#48e2d5]/20 text-[#1d1e20] dark:text-[#48e2d5] border border-[#48e2d5]/30 font-medium">
+            {tag}
+          </span>
+        ))}
+      </div>
+    </header>
+
+    <div class="prose dark:prose-invert max-w-none
+      prose-headings:text-[#1d1e20] dark:prose-headings:text-[#FFFDF6]
+      prose-p:text-gray-700 dark:prose-p:text-gray-300
+      prose-a:text-[#48e2d5] prose-a:no-underline hover:prose-a:underline
+      prose-strong:text-[#1d1e20] dark:prose-strong:text-[#FFFDF6]
+      prose-code:text-[#48e2d5] prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-normal
+      prose-pre:bg-[#1d1e20] prose-pre:border prose-pre:border-gray-700
+      prose-img:rounded-lg prose-img:shadow-lg
+      prose-li:text-gray-700 dark:prose-li:text-gray-300
+      prose-ul:marker:text-[#48e2d5]
+      prose-ol:marker:text-[#48e2d5]
+    ">
+      <Content />
+    </div>
+
+    <footer class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+      <a
+        href="/blogs"
+        class="text-[#48e2d5] hover:underline"
+      >
+        &larr; All posts
+      </a>
+    </footer>
+  </article>
+</Layout>

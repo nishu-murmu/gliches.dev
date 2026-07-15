@@ -1,16 +1,6 @@
 ---
-import { Github, Instagram, Linkedin, ExternalLink, Star, GitFork } from "lucide-react";
-
-async function fetchRepoData(repoName) {
-  const response = await fetch(
-    `https://api.github.com/repos/nishu-murmu/${repoName}`
-  );
-  const data = await response.json();
-  return {
-    stargazers: data.stargazers_count ?? 0,
-    forks: data.forks_count ?? 0
-  };
-}
+import { Github, Instagram, Linkedin } from "lucide-react";
+import Projects from "./Projects.tsx";
 
 function getMyAge() {
   const now = new Date();
@@ -18,30 +8,18 @@ function getMyAge() {
   const currentMonth = now.getMonth();
   const currentDate = now.getDate();
 
-if (currentMonth < 9) {
-  return String(currentYear - 2).slice(2);
+  if (currentMonth < 9) {
+    return String(currentYear - 2).slice(2);
+  }
+
+  if (currentMonth === 9 && currentDate < 11) {
+    return String(currentYear - 2).slice(2);
+  }
+
+  return String(currentYear - 1).slice(2);
 }
 
-if (currentMonth === 9 && currentDate < 11) {
-  return String(currentYear - 2).slice(2);
-}
-
-return String(currentYear - 1).slice(2);
-
-}
-
-// fetch at build time
-const cursorInlineData = await fetchRepoData("cursor-inline");
-const cursorInlineStars = cursorInlineData.stargazers;
-const cursorInlineForks = cursorInlineData.forks;
-
-const themeSwitchData = await fetchRepoData("ThemeSwitch.nvim");
-const themeSwitchStars = themeSwitchData.stargazers;
-
-const ytSchedulerData = await fetchRepoData("Youtube-Video-Scheduler");
-const ytSchedulerStars = ytSchedulerData.stargazers;
-const myAge = getMyAge()
-
+const myAge = getMyAge();
 ---
 
 
@@ -97,108 +75,4 @@ const myAge = getMyAge()
   </div>
 </section>
 
-<section id="projects" class="py-16 px-4">
-  <div class="max-w-4xl mx-auto">
-    <h2 class="text-2xl md:text-3xl font-bold text-center mb-12 text-[#1d1e20] dark:text-[#FFFDF6]">
-      Projects
-    </h2>
-    <ul class="space-y-6 list-disc pl-6">
-      <li>
-        <a
-          href="https://bastionresearch.in/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="font-semibold text-blue-700 dark:text-blue-400 hover:underline"
-        >
-          Bastion Research
-        </a>
-        <span class="block text-gray-600 dark:text-gray-300 ml-0">
-          Stocks and Brokerage suggestion and research application, which was migrated from wordpress to react from scratch.
-        </span>
-        <span class="inline-block my-1 px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs align-middle">Typescript</span>
-      </li>
-      <li>
-        <a
-          href="https://www.trilokwall.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="font-semibold text-blue-700 dark:text-blue-400 hover:underline"
-        >
-          Trilok Wall
-        </a>
-        <span class="block text-gray-600 dark:text-gray-300 ml-0">
-          Designed and developed the marketing website for Trilok Wall. Trilok Precast offers a wide range of RCC precast construction solutions used in residential, industrial, and commercial sites across India.
-        </span>
-        <span class="inline-block my-1 px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs align-middle">Typescript</span>
-      </li>
-      <li>
-        <a
-          href="https://github.com/nishu-murmu/ThemeSwitch.nvim"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="font-semibold text-blue-700 dark:text-blue-400 hover:underline"
-        >
-          ThemeSwitch.nvim
-        </a>
-        <span class="block text-gray-600 dark:text-gray-300 ml-0">
-          🎨 Light weight colorscheme switcher for neovim.
-        </span>
-        <span class="inline-block my-1 px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs align-middle">Lua</span>
-        <span class="inline-flex items-center gap-1 text-gray-500 dark:text-gray-400 text-sm align-middle ml-2">
-          <Star className="h-4 w-4" />
-          <span>{themeSwitchStars}</span>
-        </span>
-      </li>
-      <li>
-        <a
-          href="https://github.com/nishu-murmu/cursor-inline"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="font-semibold text-blue-700 dark:text-blue-400 hover:underline"
-        >
-          cursor-inline
-        </a>
-        <span class="block text-gray-600 dark:text-gray-300 ml-0">
-          Cursor style Inline editing plugin for neovim.
-        </span>
-        <span class="inline-block my-1 px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs align-middle">Lua</span>
-        <span class="inline-flex items-center gap-1 text-gray-500 dark:text-gray-400 text-sm align-middle ml-2">
-          <Star className="h-4 w-4" />
-          <span>{cursorInlineStars}</span>
-        </span>
-      </li>
-      <li>
-        <a
-          href="https://github.com/nishu-murmu/Youtube-Video-Scheduler"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="font-semibold text-blue-700 dark:text-blue-400 hover:underline"
-        >
-          Youtube-Video-Scheduler
-        </a>
-        <span class="block text-gray-600 dark:text-gray-300 ml-0">
-          ⏰ A browser extension to schedule videos on youtube, incase you want to watch something later
-        </span>
-        <span class="inline-block my-1 px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs align-middle">TypeScript</span>
-        <span class="inline-flex items-center gap-1 text-gray-500 dark:text-gray-400 text-sm align-middle ml-2">
-          <Star className="h-4 w-4" />
-          <span>{ytSchedulerStars}</span>
-        </span>
-      </li>
-      <li>
-        <a
-          href="https://github.com/nishu-murmu/WhatsApp-Toggle"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="font-semibold text-blue-700 dark:text-blue-400 hover:underline"
-        >
-          WhatsApp-Toggle
-        </a>
-        <span class="block text-gray-600 dark:text-gray-300 ml-0">
-          Small chrome extension to toggle whatsApp left sidebar chats.
-        </span>
-        <span class="inline-block my-1 px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs align-middle">JavaScript</span>
-      </li>
-    </ul>
-  </div>
-</section>
+<Projects client:load />

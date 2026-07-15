@@ -1,21 +1,124 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
 ---
 
 <Layout>
-  <section class="px-4 py-5 text-center my-6">
-    <h1 class="text-2xl md:text-3xl font-bold flex items-start">Blogs</h1>
+  <section class="py-12">
+    <h1 class="text-3xl md:text-4xl font-bold mb-2 text-[#1d1e20] dark:text-[#FFFDF6]">
+      Blogs
+    </h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-8">
+      Thoughts on code, tools, and building things.
+    </p>
 
-    <div
-      class="max-w-2xl mx-auto my-6 p-8 rounded-lg shadow-lg bg-gray-800/50 backdrop-blur-sm border border-gray-700"
-    >
-      <h2 class="text-2xl md:text-3xl font-semibold mb-4 text-yellow-400">
-        Coming Soon!
-      </h2>
-
-      <p class="mb-6 text-lg md:text-xl text-gray-300">
-        Thank you for visiting! Blogs section is currently under development.
-      </p>
+    <div class="flex flex-wrap gap-2 mb-10" id="tag-filters">
+      <button
+        class="tag-btn px-3 py-1 text-xs rounded-full border font-medium transition-all duration-200 cursor-pointer bg-[#48e2d5] text-[#1d1e20] border-[#48e2d5] dark:bg-[#48e2d5] dark:text-[#1d1e20] dark:border-[#48e2d5]"
+        data-tag="all"
+      >
+        all
+      </button>
+      {allTags.map((tag) => (
+        <button
+          class="tag-btn px-3 py-1 text-xs rounded-full border font-medium transition-all duration-200 cursor-pointer bg-transparent text-[#1d1e20] dark:text-[#48e2d5] border-[#48e2d5]/30 hover:bg-[#48e2d5]/20"
+          data-tag={tag}
+        >
+          {tag}
+        </button>
+      ))}
     </div>
+
+    <ul class="space-y-8" id="post-list">
+      {posts.map((post) => (
+        <li data-tags={post.data.tags.join(",")}>
+          <a
+            href={`/blogs/${post.id}`}
+            class="block group"
+          >
+            <article class="p-6 rounded-lg border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-[#282a2c]/50 hover:border-[#48e2d5]/50 transition-colors duration-300">
+              <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-2">
+                <time datetime={post.data.pubDate.toISOString()}>
+                  {post.data.pubDate.toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </time>
+              </div>
+              <h2 class="text-xl font-semibold mb-2 text-[#1d1e20] dark:text-[#FFFDF6] group-hover:text-[#48e2d5] transition-colors duration-300">
+                {post.data.title}
+              </h2>
+              <p class="text-gray-600 dark:text-gray-300 mb-3">
+                {post.data.description}
+              </p>
+              <div class="flex flex-wrap gap-2">
+                {post.data.tags.map((tag) => (
+                  <span class="px-2 py-0.5 text-xs rounded bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </article>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div id="no-results" class="text-center py-16 hidden">
+      <p class="text-gray-500 dark:text-gray-400 text-lg">No posts found for this category.</p>
+    </div>
+
+    {posts.length === 0 && (
+      <div class="text-center py-16">
+        <p class="text-gray-500 dark:text-gray-400 text-lg">No posts yet. Check back soon!</p>
+      </div>
+    )}
   </section>
 </Layout>
+
+<script>
+  const tagButtons = document.querySelectorAll<HTMLButtonElement>(".tag-btn");
+  const postItems = document.querySelectorAll<HTMLLIElement>("#post-list li");
+  const noResults = document.getElementById("no-results");
+  let activeTag = "all";
+
+  function updateFilter(tag: string) {
+    activeTag = tag;
+    let visibleCount = 0;
+
+    postItems.forEach((item) => {
+      const tags = (item.dataset.tags ?? "").split(",");
+      const show = tag === "all" || tags.includes(tag);
+      item.style.display = show ? "" : "none";
+      if (show) visibleCount++;
+    });
+
+    if (noResults) {
+      noResults.classList.toggle("hidden", visibleCount > 0);
+    }
+
+    tagButtons.forEach((btn) => {
+      const isActive = btn.dataset.tag === tag;
+      if (isActive) {
+        btn.classList.add("bg-[#48e2d5]", "text-[#1d1e20]", "border-[#48e2d5]", "dark:bg-[#48e2d5]", "dark:text-[#1d1e20]", "dark:border-[#48e2d5]");
+        btn.classList.remove("bg-transparent", "text-[#1d1e20]", "dark:text-[#48e2d5]", "border-[#48e2d5]/30");
+      } else {
+        btn.classList.remove("bg-[#48e2d5]", "text-[#1d1e20]", "border-[#48e2d5]", "dark:bg-[#48e2d5]", "dark:text-[#1d1e20]", "dark:border-[#48e2d5]");
+        btn.classList.add("bg-transparent", "text-[#1d1e20]", "dark:text-[#48e2d5]", "border-[#48e2d5]/30");
+      }
+    });
+  }
+
+  tagButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      updateFilter(btn.dataset.tag ?? "all");
+    });
+  });
+</script>

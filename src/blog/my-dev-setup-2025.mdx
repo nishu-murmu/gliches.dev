@@ -1,0 +1,77 @@
+---
+title: "My Development Setup in 2025"
+description: "The tools and workflows I use daily as a software developer."
+pubDate: 2025-11-20
+tags: ["devtools", "productivity", "linux"]
+---
+
+## My Daily Drivers
+
+After years of tweaking, here's the setup that sticks.
+
+## Operating System
+
+I daily-drive **Arch Linux** on a ThinkPad. Rolling release means I always have the latest tools, and the AUR makes package management a breeze.
+
+```bash
+# Quick system update
+sudo pacman -Syu
+ yay -Sua
+```
+
+## Terminal
+
+**Wezterm** with a custom config. It's GPU-accelerated, cross-platform, and Lua-configurable — which means I can script everything.
+
+```lua
+-- wezterm.lua
+local wez = require("wezterm")
+local config = wez.config_builder()
+
+config.font = wez.font("Hack Nerd Font")
+config.color_scheme = "Catppuccin Mocha"
+config.window_padding = { left = 8, right = 8, top = 8, bottom = 8 }
+
+return config
+```
+
+## Editor
+
+**Neovim** is where I spend most of my time. Here's a glimpse of my config:
+
+```lua
+-- Key mappings
+vim.keymap.set("n", "<leader>e", "<cmd>Neotree toggle<cr>")
+vim.keymap.set("n", "<leader>f", "<cmd>Telescope find_files<cr>")
+vim.keymap.set("n", "<leader>g", "<cmd>Telescope live_grep<cr>")
+```
+
+## Shell
+
+**Fish shell** with custom completions. It's the most user-friendly shell I've used.
+
+```fish
+# Custom abbreviations
+abbr -a g git
+abbr -a gp git push
+abbr -a gl git pull
+abbr -a gs git status
+```
+
+## Git Workflow
+
+I use **lazygit** for interactive git operations. It's fast, intuitive, and keyboard-driven.
+
+```bash
+# Install lazygit
+paru -S lazygit
+```
+
+## Why This Stack?
+
+- **Speed**: Everything is keyboard-driven and instant
+- **Customizability**: Lua configs for Neovim and Wezterm
+- **Consistency**: Same setup across machines via dotfiles
+- **Community**: Active communities for every tool
+
+The best setup is the one you know well. Don't chase shiny tools — master your current ones.

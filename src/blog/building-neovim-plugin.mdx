@@ -1,0 +1,81 @@
+---
+title: "Building a Neovim Plugin from Scratch"
+description: "A step-by-step guide to creating your first Neovim plugin using Lua."
+pubDate: 2025-12-15
+tags: ["neovim", "lua", "tutorial"]
+---
+
+## Introduction
+
+Neovim is a hyperextensible Vim-based text editor. Building plugins for it is surprisingly straightforward with Lua. In this post, I'll walk you through creating a simple plugin.
+
+## Prerequisites
+
+- Neovim 0.9+
+- Basic Lua knowledge
+- A `init.lua` config
+
+## Setting Up the Plugin Structure
+
+Every Neovim plugin follows a standard directory layout:
+
+```
+my-plugin/
+├── lua/
+│   └── my-plugin/
+│       └── init.lua
+├── plugin/
+│   └── my-plugin.lua
+└── README.md
+```
+
+## Writing the Lua Code
+
+Here's a minimal plugin that prints a greeting:
+
+```lua
+-- lua/my-plugin/init.lua
+local M = {}
+
+function M.greet(name)
+  print("Hello, " .. name .. "!")
+end
+
+return M
+```
+
+And the plugin entry point:
+
+```lua
+-- plugin/my-plugin.lua
+local my_plugin = require("my-plugin")
+
+vim.api.nvim_create_user_command("Greet", function(opts)
+  my_plugin.greet(opts.args)
+end, { nargs = 1 })
+```
+
+## Testing It Out
+
+After placing the plugin in your runtime path, run:
+
+```vim
+:Greet World
+```
+
+You should see `Hello, World!` printed.
+
+## Adding Highlights
+
+You can also define custom highlight groups:
+
+```lua
+vim.api.nvim_set_hl(0, "MyPluginHighlight", {
+  fg = "#48e2d5",
+  bold = true,
+})
+```
+
+## Conclusion
+
+Building Neovim plugins is a rewarding experience. The Lua API is well-documented and the community is incredibly supportive. Start small, iterate, and share your creations!
