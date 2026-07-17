@@ -19,11 +19,24 @@ const { Content } = await render(post);
     <header class="mb-10">
       <a
         href="/blogs"
-        class="text-sm text-[#48e2d5] hover:underline mb-4 inline-block"
+        class="mb-4 inline-flex items-center gap-2 text-sm font-medium text-[var(--color-accent)] hover:underline"
       >
-        &larr; Back to blogs
+        <svg
+          aria-hidden="true"
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M19 12H5" />
+          <path d="m12 19-7-7 7-7" />
+        </svg>
+        <span>Back to blogs</span>
       </a>
-      <h1 class="text-3xl md:text-4xl font-bold text-[#1d1e20] dark:text-[#FFFDF6] mb-3">
+      <h1 class="text-3xl md:text-4xl font-bold text-[var(--color-heading)] mb-3">
         {post.data.title}
       </h1>
       <p class="text-gray-600 dark:text-gray-400 mb-4">
@@ -40,7 +53,7 @@ const { Content } = await render(post);
       </div>
       <div class="flex flex-wrap gap-2 mt-4">
         {post.data.tags.map((tag: string) => (
-          <span class="px-3 py-1 text-xs rounded-full bg-[#48e2d5]/20 text-[#1d1e20] dark:text-[#48e2d5] border border-[#48e2d5]/30 font-medium">
+          <span class="px-3 py-1 text-xs rounded-full border border-[var(--color-tag-border)] bg-[var(--color-accent-soft)] text-[var(--color-tag-text)] font-medium">
             {tag}
           </span>
         ))}
@@ -48,23 +61,23 @@ const { Content } = await render(post);
     </header>
 
     <div class="prose dark:prose-invert max-w-none text-base md:text-lg
-prose-headings:text-[#1d1e20] dark:prose-headings:text-[#FFFDF6]
+prose-headings:text-[var(--color-heading)] dark:prose-headings:text-[var(--color-heading)]
 prose-headings:scroll-mt-16 prose-headings:tracking-tight
 prose-h1:text-xl prose-h1:mb-2.5 prose-h1:tracking-tighter
 prose-h2:text-lg prose-h2:mt-5 prose-h2:mb-2
 prose-h3:text-base prose-h3:mt-4 prose-h3:mb-1.5
 prose-p:text-sm prose-p:text-gray-700 dark:prose-p:text-gray-300
 prose-p:leading-normal prose-p:my-2 prose-p:tracking-tight
-prose-a:text-[#48e2d5] prose-a:no-underline hover:prose-a:underline
-prose-strong:text-[#1d1e20] dark:prose-strong:text-[#FFFDF6]
-prose-code:text-xs prose-code:text-[#48e2d5] prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:font-normal
+prose-a:text-[var(--color-accent)] prose-a:no-underline hover:prose-a:underline
+prose-strong:text-[var(--color-heading)] dark:prose-strong:text-[var(--color-heading)]
+prose-code:text-xs prose-code:text-[var(--color-accent)] prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:font-normal
 prose-pre:bg-[#1d1e20] prose-pre:border prose-pre:border-gray-700
 prose-img:rounded prose-img:shadow-md
 prose-li:text-sm prose-li:text-gray-700 dark:prose-li:text-gray-300
 prose-li:my-0.5 prose-li:tracking-tight
 prose-ul:my-2 prose-ol:my-2 prose-ul:pl-4 prose-ol:pl-4
-prose-ul:marker:text-[#48e2d5]
-prose-ol:marker:text-[#48e2d5]
+prose-ul:marker:text-[var(--color-accent)]
+prose-ol:marker:text-[var(--color-accent)]
     ">
       <Content />
     </div>
@@ -72,9 +85,22 @@ prose-ol:marker:text-[#48e2d5]
     <footer class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
       <a
         href="/blogs"
-        class="text-[#48e2d5] hover:underline"
+        class="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-accent)] hover:underline"
       >
-        &larr; All posts
+        <svg
+          aria-hidden="true"
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M19 12H5" />
+          <path d="m12 19-7-7 7-7" />
+        </svg>
+        <span>Back to blogs</span>
       </a>
     </footer>
   </article>

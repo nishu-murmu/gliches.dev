@@ -1,7 +1,10 @@
 import { Moon, Sun } from "lucide-react";
-import { useState, useRef, useEffect, useContext } from "react";
+import { useState, useRef, useEffect } from "react";
 import { toggleDarkMode } from "../../atoms";
 import { useStore } from "@nanostores/react";
+import { siteConfig } from "../../config/site";
+
+const { profile, navigation } = siteConfig;
 
 const Header = () => {
   const [toggle, setToggle] = useState(() => {
@@ -10,14 +13,14 @@ const Header = () => {
     }
     return true;
   });
-  const [displayText, setDisplayText] = useState("Nishu Murmu");
+  const [displayText, setDisplayText] = useState(profile.name);
   const [textColor, setTextColor] = useState<string>("");
   const [isHovered, setIsHovered] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const $toggleDarkMode = useStore(toggleDarkMode);
 
-  const psychedelicColors = [
+  const darkHoverColors = [
     "#FF00FF", // Neon Pink
     "#00FFFF", // Cyan
     "#00FF00", // Neon Green
@@ -28,6 +31,17 @@ const Header = () => {
     "#00FFFF", // Aqua
     "#FF1493", // Deep Pink
     "#7FFF00", // Chartreuse
+  ];
+
+  const lightHoverColors = [
+    "#7C3AED",
+    "#1D4ED8",
+    "#0F766E",
+    "#B45309",
+    "#BE185D",
+    "#6D28D9",
+    "#15803D",
+    "#9A3412",
   ];
 
   const getRandomText = (length: number): string => {
@@ -41,8 +55,8 @@ const Header = () => {
   };
 
   const startGlitchAnimation = () => {
-    const input1 = "Nishu Murmu";
-    const input2 = "_Gliches_";
+    const input1 = profile.name;
+    const input2 = profile.brand;
     const maxLength = Math.max(input1.length, input2.length);
     const totalIterations = 10;
     setDisplayText(input1);
@@ -50,18 +64,21 @@ const Header = () => {
 
     if (intervalRef.current) clearInterval(intervalRef.current);
 
+    const hoverColors =
+      $toggleDarkMode === "dark" ? darkHoverColors : lightHoverColors;
+
     intervalRef.current = setInterval(() => {
       iterationCount++;
       if (iterationCount >= totalIterations) {
         clearInterval(intervalRef.current!);
         intervalRef.current = null;
         setDisplayText(input2);
-        setTextColor("#48e2d5");
+        setTextColor($toggleDarkMode === "dark" ? "#48e2d5" : "#6d28d9");
         return;
       }
 
       const randomColor =
-        psychedelicColors[Math.floor(Math.random() * psychedelicColors.length)];
+        hoverColors[Math.floor(Math.random() * hoverColors.length)];
       setTextColor(randomColor);
       setDisplayText(getRandomText(maxLength));
     }, 50);
@@ -81,17 +98,18 @@ const Header = () => {
     } else {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       if (intervalRef.current) clearInterval(intervalRef.current);
-      setDisplayText("Nishu Murmu");
+      setDisplayText(profile.name);
+      setTextColor("");
     }
 
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [isHovered]);
+  }, [isHovered, $toggleDarkMode]);
 
   return (
-    <header className="bg-white/50 dark:bg-[#2d2e30]/50 border-b border-gray-200 dark:border-gray-600 sticky top-0 z-50 shadow-sm backdrop-blur-sm">
+    <header className="bg-[var(--color-header-bg)] border-b border-[var(--color-border)] sticky top-0 z-50 shadow-sm backdrop-blur-sm">
       <div className="max-w-4xl mx-auto px-8 flex justify-between items-center h-16">
         <div
           className="logo"
@@ -101,7 +119,7 @@ const Header = () => {
           <h1 className="text-xl font-semibold">
             <a
               href="/"
-              className="transition-all duration-300 dark:text-[#FFFDF6] text-[#1d1e20]"
+              className="transition-all duration-300 text-[var(--color-text)]"
               style={{ color: textColor || "" }}
             >
               {displayText}
@@ -113,9 +131,9 @@ const Header = () => {
             <li>
               <a
                 href="/blogs"
-                className="text-gray-700 dark:text-gray-300 font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300"
+              className="text-[var(--color-muted)] font-medium hover:text-[var(--color-accent)] transition-colors duration-300"
               >
-                Blogs
+                {navigation.blogsLabel}
               </a>
             </li>
           </ul>

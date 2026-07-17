@@ -1,48 +1,30 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
+import { siteConfig } from "../../config/site";
 
 const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
-
-const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
 ---
 
 <Layout>
   <section class="py-12">
-    <h1 class="text-3xl md:text-4xl font-bold mb-2 text-[#1d1e20] dark:text-[#FFFDF6]">
-      Blogs
+    <h1 class="text-3xl md:text-4xl font-bold mb-2 text-[var(--color-heading)]">
+      {siteConfig.blog.title}
     </h1>
     <p class="text-gray-600 dark:text-gray-400 mb-8">
-      Thoughts on code, tools, and building things.
+      {siteConfig.blog.description}
     </p>
-
-    <div class="flex flex-wrap gap-2 mb-10" id="tag-filters">
-      <button
-        class="tag-btn px-3 py-1 text-xs rounded-full border font-medium transition-all duration-200 cursor-pointer bg-[#48e2d5] text-[#1d1e20] border-[#48e2d5] dark:bg-[#48e2d5] dark:text-[#1d1e20] dark:border-[#48e2d5]"
-        data-tag="all"
-      >
-        all
-      </button>
-      {allTags.map((tag) => (
-        <button
-          class="tag-btn px-3 py-1 text-xs rounded-full border font-medium transition-all duration-200 cursor-pointer bg-transparent text-[#1d1e20] dark:text-[#48e2d5] border-[#48e2d5]/30 hover:bg-[#48e2d5]/20"
-          data-tag={tag}
-        >
-          {tag}
-        </button>
-      ))}
-    </div>
 
     <ul class="space-y-8" id="post-list">
       {posts.map((post) => (
-        <li data-tags={post.data.tags.join(",")}>
+        <li>
           <a
             href={`/blogs/${post.id}`}
             class="block group"
           >
-            <article class="p-6 rounded-lg border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-[#282a2c]/50 hover:border-[#48e2d5]/50 transition-colors duration-300">
+            <article class="p-6 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] hover:border-[var(--color-accent)] transition-colors duration-300">
               <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-2">
                 <time datetime={post.data.pubDate.toISOString()}>
                   {post.data.pubDate.toLocaleDateString("en-US", {
@@ -52,19 +34,12 @@ const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
                   })}
                 </time>
               </div>
-              <h2 class="text-xl font-semibold mb-2 text-[#1d1e20] dark:text-[#FFFDF6] group-hover:text-[#48e2d5] transition-colors duration-300">
+              <h2 class="text-xl font-semibold mb-2 text-[var(--color-heading)] group-hover:text-[var(--color-accent)] transition-colors duration-300">
                 {post.data.title}
               </h2>
               <p class="text-gray-600 dark:text-gray-300 mb-3">
                 {post.data.description}
               </p>
-              <div class="flex flex-wrap gap-2">
-                {post.data.tags.map((tag) => (
-                  <span class="px-2 py-0.5 text-xs rounded bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                    {tag}
-                  </span>
-                ))}
-              </div>
             </article>
           </a>
         </li>
@@ -78,7 +53,7 @@ const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
       <div class="flex items-center gap-2">
         <button
           id="pagination-prev"
-          class="px-4 py-2 text-sm rounded-md border border-[#48e2d5]/30 text-[#1d1e20] dark:text-[#48e2d5] hover:bg-[#48e2d5]/10 disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-200"
+          class="px-4 py-2 text-sm rounded-md border border-[var(--color-tag-border)] text-[var(--color-tag-text)] hover:bg-[var(--color-accent-soft)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-200"
           type="button"
         >
           Previous
@@ -86,7 +61,7 @@ const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
         <div id="pagination-pages" class="flex flex-wrap justify-center gap-2"></div>
         <button
           id="pagination-next"
-          class="px-4 py-2 text-sm rounded-md border border-[#48e2d5]/30 text-[#1d1e20] dark:text-[#48e2d5] hover:bg-[#48e2d5]/10 disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-200"
+          class="px-4 py-2 text-sm rounded-md border border-[var(--color-tag-border)] text-[var(--color-tag-text)] hover:bg-[var(--color-accent-soft)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-200"
           type="button"
         >
           Next
@@ -95,52 +70,25 @@ const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
       <p id="pagination-status" class="text-sm text-gray-500 dark:text-gray-400"></p>
     </div>
 
-    <div id="no-results" class="text-center py-16 hidden">
-      <p class="text-gray-500 dark:text-gray-400 text-lg">No posts found for this category.</p>
-    </div>
-
     {posts.length === 0 && (
       <div class="text-center py-16">
-        <p class="text-gray-500 dark:text-gray-400 text-lg">No posts yet. Check back soon!</p>
+        <p class="text-gray-500 dark:text-gray-400 text-lg">{siteConfig.blog.emptyState}</p>
       </div>
     )}
   </section>
 </Layout>
 
-<script>
-  const POSTS_PER_PAGE = 10;
-  const tagButtons = document.querySelectorAll<HTMLButtonElement>(".tag-btn");
-  const postItems = Array.from(document.querySelectorAll<HTMLLIElement>("#post-list li"));
-  const noResults = document.getElementById("no-results");
+<script define:vars={{ postsPerPage: siteConfig.blog.postsPerPage }}>
+  const POSTS_PER_PAGE = postsPerPage;
+  const postItems = Array.from(document.querySelectorAll("#post-list li"));
   const pagination = document.getElementById("pagination");
   const paginationPages = document.getElementById("pagination-pages");
   const paginationStatus = document.getElementById("pagination-status");
-  const prevButton = document.getElementById("pagination-prev") as HTMLButtonElement | null;
-  const nextButton = document.getElementById("pagination-next") as HTMLButtonElement | null;
-  let activeTag = "all";
+  const prevButton = document.getElementById("pagination-prev");
+  const nextButton = document.getElementById("pagination-next");
   let currentPage = 1;
 
-  function getFilteredItems() {
-    return postItems.filter((item) => {
-      const tags = (item.dataset.tags ?? "").split(",");
-      return activeTag === "all" || tags.includes(activeTag);
-    });
-  }
-
-  function updateTagStyles() {
-    tagButtons.forEach((btn) => {
-      const isActive = btn.dataset.tag === activeTag;
-      if (isActive) {
-        btn.classList.add("bg-[#48e2d5]", "text-[#1d1e20]", "border-[#48e2d5]", "dark:bg-[#48e2d5]", "dark:text-[#1d1e20]", "dark:border-[#48e2d5]");
-        btn.classList.remove("bg-transparent", "text-[#1d1e20]", "dark:text-[#48e2d5]", "border-[#48e2d5]/30");
-      } else {
-        btn.classList.remove("bg-[#48e2d5]", "text-[#1d1e20]", "border-[#48e2d5]", "dark:bg-[#48e2d5]", "dark:text-[#1d1e20]", "dark:border-[#48e2d5]");
-        btn.classList.add("bg-transparent", "text-[#1d1e20]", "dark:text-[#48e2d5]", "border-[#48e2d5]/30");
-      }
-    });
-  }
-
-  function renderPagination(totalPages: number, visibleCount: number) {
+  function renderPagination(totalPages, visibleCount) {
     if (!paginationPages || !paginationStatus || !prevButton || !nextButton || !pagination) {
       return;
     }
@@ -161,8 +109,8 @@ const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
       button.type = "button";
       button.textContent = String(page);
       button.className = `min-w-10 px-3 py-2 text-sm rounded-md border transition-colors duration-200 ${isActive
-        ? "bg-[#48e2d5] text-[#1d1e20] border-[#48e2d5]"
-        : "border-[#48e2d5]/30 text-[#1d1e20] dark:text-[#48e2d5] hover:bg-[#48e2d5]/10"}`;
+        ? "bg-[var(--color-accent)] text-[#fffdf6] dark:text-[#1d1e20] border-[var(--color-accent)]"
+        : "border-[var(--color-tag-border)] text-[var(--color-tag-text)] hover:bg-[var(--color-accent-soft)]"}`;
       button.addEventListener("click", () => {
         currentPage = page;
         renderPosts();
@@ -172,12 +120,11 @@ const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
 
     prevButton.disabled = currentPage === 1;
     nextButton.disabled = currentPage === totalPages;
-    paginationStatus.textContent = `${visibleCount} post${visibleCount === 1 ? "" : "s"} in ${activeTag === "all" ? "all categories" : activeTag}`;
+    paginationStatus.textContent = `${visibleCount} post${visibleCount === 1 ? "" : "s"} total`;
   }
 
   function renderPosts() {
-    const filteredItems = getFilteredItems();
-    const totalPages = Math.ceil(filteredItems.length / POSTS_PER_PAGE);
+    const totalPages = Math.ceil(postItems.length / POSTS_PER_PAGE);
 
     if (totalPages > 0 && currentPage > totalPages) {
       currentPage = totalPages;
@@ -190,29 +137,12 @@ const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
       item.style.display = "none";
     });
 
-    filteredItems.slice(start, end).forEach((item) => {
+    postItems.slice(start, end).forEach((item) => {
       item.style.display = "";
     });
 
-    if (noResults) {
-      noResults.classList.toggle("hidden", filteredItems.length > 0);
-    }
-
-    updateTagStyles();
-    renderPagination(totalPages, filteredItems.length);
+    renderPagination(totalPages, postItems.length);
   }
-
-  function updateFilter(tag: string) {
-    activeTag = tag;
-    currentPage = 1;
-    renderPosts();
-  }
-
-  tagButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      updateFilter(btn.dataset.tag ?? "all");
-    });
-  });
 
   prevButton?.addEventListener("click", () => {
     if (currentPage > 1) {
@@ -222,7 +152,7 @@ const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
   });
 
   nextButton?.addEventListener("click", () => {
-    const totalPages = Math.ceil(getFilteredItems().length / POSTS_PER_PAGE);
+    const totalPages = Math.ceil(postItems.length / POSTS_PER_PAGE);
     if (currentPage < totalPages) {
       currentPage += 1;
       renderPosts();

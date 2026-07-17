@@ -15,6 +15,34 @@
   --font-hack: "HackNerdFont", "sans-serif";
 }
 
+:root {
+  --color-bg: #f6efe5;
+  --color-text: #1d1e20;
+  --color-heading: #1d1e20;
+  --color-muted: #5f6368;
+  --color-surface: #fffaf2;
+  --color-border: #d8c9b6;
+  --color-header-bg: rgb(255 250 242 / 0.88);
+  --color-accent: #7c3aed;
+  --color-accent-soft: #efe7ff;
+  --color-tag-text: #5b34b3;
+  --color-tag-border: #c8b3f7;
+}
+
+.dark {
+  --color-bg: #1d1e20;
+  --color-text: #fffdf6;
+  --color-heading: #fffdf6;
+  --color-muted: #9ca3af;
+  --color-surface: rgb(40 42 44 / 0.5);
+  --color-border: #4b5563;
+  --color-header-bg: rgb(45 46 48 / 0.5);
+  --color-accent: #48e2d5;
+  --color-accent-soft: rgb(72 226 213 / 0.12);
+  --color-tag-text: #48e2d5;
+  --color-tag-border: rgb(72 226 213 / 0.3);
+}
+
 .logo a {
   display: inline-block;
   font-weight: 600;

@@ -15,7 +15,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   }, [$toggleDarkMode]);
 
   return (
-    <body className="leading-relaxed font-hack text-sm text-[#1d1e20] bg-[#48e2d5] dark:text-[#FFFDF6] dark:bg-[#1d1e20] transition-colors duration-300">
+    <body className="leading-relaxed font-hack text-sm text-[var(--color-text)] bg-[var(--color-bg)] transition-colors duration-300">
       {children}
     </body>
   );
