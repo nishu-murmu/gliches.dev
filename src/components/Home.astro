@@ -20,6 +20,7 @@ function getMyAge() {
 }
 
 const myAge = getMyAge();
+const assetBase = import.meta.env.BASE_URL;
 ---
 
 
@@ -28,12 +29,12 @@ const myAge = getMyAge();
     <div class="flex items-center justify-center mb-6">
       <div class="glitch-wrapper">
         <img
-          src="/github-me.jpeg"
+          src={`${assetBase}github-me.jpeg`}
           alt="Nishu Murmu"
           class="glitch-img h-40 w-40 rounded-full"
         />
         <img
-          src="/real-me.jpg"
+          src={`${assetBase}real-me.jpg`}
           alt="Nishu Murmu"
           class="glitch-img h-40 w-40 rounded-full"
         />

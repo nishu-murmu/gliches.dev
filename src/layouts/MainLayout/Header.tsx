@@ -5,6 +5,7 @@ import { useStore } from "@nanostores/react";
 import { siteConfig } from "../../config/site";
 
 const { profile, navigation } = siteConfig;
+const baseUrl = import.meta.env.BASE_URL;
 
 const Header = () => {
   const [toggle, setToggle] = useState(() => {
@@ -118,7 +119,7 @@ const Header = () => {
         >
           <h1 className="text-xl font-semibold">
             <a
-              href="/"
+              href={baseUrl}
               className="transition-all duration-300 text-[var(--color-text)]"
               style={{ color: textColor || "" }}
             >
@@ -130,8 +131,8 @@ const Header = () => {
           <ul className="hidden md:flex list-none gap-8 items-center">
             <li>
               <a
-                href="/blogs"
-              className="text-[var(--color-muted)] font-medium hover:text-[var(--color-accent)] transition-colors duration-300"
+                href={`${baseUrl}blogs`}
+                className="text-[var(--color-muted)] font-medium hover:text-[var(--color-accent)] transition-colors duration-300"
               >
                 {navigation.blogsLabel}
               </a>

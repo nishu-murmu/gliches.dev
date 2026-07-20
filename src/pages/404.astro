@@ -1,11 +1,25 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+const redirectTarget = `${import.meta.env.BASE_URL}?redirect=${encodeURIComponent(Astro.url.pathname)}`;
+const notFoundImage = `${import.meta.env.BASE_URL}404.gif`;
 ---
 
 <Layout>
+  <script is:inline>
+    window.location.replace({JSON.stringify(redirectTarget)});
+  </script>
   <section
     class="px-4 py-5 text-center flex items-center justify-center w-full my-6"
   >
-    <img src="./404.gif" alt="404 Not Found" width="300" height="300" />
+    <div>
+      <img src={notFoundImage} alt="404 Not Found" width="300" height="300" />
+      <p class="mt-4 text-sm text-neutral-600 dark:text-neutral-400">
+        Redirecting to the home page...
+      </p>
+      <p class="mt-2 text-sm">
+        <a href={redirectTarget} class="underline">Go back home</a>
+      </p>
+    </div>
   </section>
 </Layout>
